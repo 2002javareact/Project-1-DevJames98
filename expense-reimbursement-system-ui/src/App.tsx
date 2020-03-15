@@ -35,9 +35,31 @@ function App() {
             render={() => <ProfileComponent currentUser={currentUser} />}
           />
           {/* Manage Component */}
-          <Route path="/manage" component={ManageComponent} />
+          {/* <Route path="/manage" component={ManageComponent} /> */}
+          <Route
+            path="/manage"
+            render={props => (
+              <ManageComponent
+                history={props.history}
+                match={props.match}
+                location={props.location}
+                currentUser={currentUser}
+              />
+            )}
+          />
           {/* Reimbursement Component */}
-          <Route path="/reimbursements" component={ReimbursementsComponent} />
+          {/* <Route path="/reimbursements" component={ReimbursementsComponent} /> */}
+          <Route
+            path="/reimbursements"
+            render={props => (
+              <ReimbursementsComponent
+                history={props.history}
+                match={props.match}
+                location={props.location}
+                currentUser={currentUser}
+              />
+            )}
+          />
           {/* Home Page Component */}
           <Route path="/" component={HomeComponent} />
         </Switch>

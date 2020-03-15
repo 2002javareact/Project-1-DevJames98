@@ -16,7 +16,7 @@ export class ProfileComponent extends React.Component<IProfileProps, any> {
         {console.log(this.props.currentUser)}
       </>
     ) : (
-      <Redirect to="/login" />
+      <Redirect to="/" />
     );
   }
 }

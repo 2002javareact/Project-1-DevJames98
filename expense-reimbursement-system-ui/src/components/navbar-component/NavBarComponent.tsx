@@ -39,11 +39,16 @@ const NavBarComponent = (props: any) => {
                 <DropdownItem>
                   <Link to="/profile">Profile</Link>
                 </DropdownItem>
+                {/* Find out how to put another dropdown here */}
                 <DropdownItem>
-                  <Link to="/manage">Manage</Link>
+                  {/* <Link to="/manage/users">Manage</Link> */}
+                  {/* <Link to="/manage/user">Manage</Link> */}
+                  {/* <Link to="/manage/update-user">Manage</Link> */}
+                  <Link to="/manage/reimbursements">Manage</Link>
+                  {/* <Link to="/manage/update-reimbursement">Manage</Link> */}
                 </DropdownItem>
                 <DropdownItem>
-                  <Link to="/reimbursements">Reimbursements</Link>
+                  <Link to="/reimbursements/submit">Reimbursements</Link>
                 </DropdownItem>
                 <DropdownItem divider />
                 {/* <DropdownItem>Reset</DropdownItem> */}
