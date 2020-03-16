@@ -10,7 +10,10 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  NavbarText
+  NavbarText,
+  NavItem,
+  NavLink,
+  Button
 } from "reactstrap";
 import { Link } from "react-router-dom";
 
@@ -27,33 +30,82 @@ const NavBarComponent = (props: any) => {
   return (
     <div>
       <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">Expense Reimbursement System</NavbarBrand>
+        <NavbarBrand>Expense Reimbursement System</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
+            <NavItem>
+              {/* <NavLink to="/profile">Profile</NavLink> */}
+              <Link to="/">Home</Link>
+            </NavItem>
+            <DropdownItem divider />
+            <NavItem>
+              {/* <NavLink to="/profile">Profile</NavLink> */}
+              <Link to="/profile">Profile</Link>
+            </NavItem>
+            <DropdownItem divider />
+            {props.role === "User" ? (
+              <div></div>
+            ) : (
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                  Manage
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>
+                    <Link to="/manage/users">Find All Users</Link>
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem>
+                    <Link to="/manage/user">Find One User</Link>
+                  </DropdownItem>
+                  {props.role === "Admin" ? (
+                    <>
+                      <DropdownItem divider />
+                      <DropdownItem>
+                        <Link to="/manage/update-user">Update User</Link>
+                      </DropdownItem>
+                    </>
+                  ) : (
+                    <div></div>
+                  )}
+                  <DropdownItem divider />
+                  <DropdownItem>
+                    <Link to="/manage/reimbursements">Find Reimbursement</Link>
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem>
+                    <Link to="/manage/update-reimbursement">
+                      Update Reimbursement
+                    </Link>
+                  </DropdownItem>
+
+                  {/* <DropdownItem>Reset</DropdownItem> */}
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            )}
+            <DropdownItem divider />
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
-                Options
+                Reimbursements
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem>
-                  <Link to="/profile">Profile</Link>
-                </DropdownItem>
-                {/* Find out how to put another dropdown here */}
-                <DropdownItem>
-                  {/* <Link to="/manage/users">Manage</Link> */}
-                  {/* <Link to="/manage/user">Manage</Link> */}
-                  {/* <Link to="/manage/update-user">Manage</Link> */}
-                  <Link to="/manage/reimbursements">Manage</Link>
-                  {/* <Link to="/manage/update-reimbursement">Manage</Link> */}
-                </DropdownItem>
-                <DropdownItem>
-                  <Link to="/reimbursements/submit">Reimbursements</Link>
+                  <Link to="/reimbursements/all-user-reimbursements">
+                    My Reimbursements
+                  </Link>
                 </DropdownItem>
                 <DropdownItem divider />
+                <DropdownItem>
+                  <Link to="/reimbursements/submit">Submit Reimbursement</Link>
+                </DropdownItem>
+
                 {/* <DropdownItem>Reset</DropdownItem> */}
               </DropdownMenu>
             </UncontrolledDropdown>
+            {/* <NavbarText>Simple Text</NavbarText> */}
+            <DropdownItem divider />
+            <Button href="/">Log Out</Button>
           </Nav>
           {/* <NavbarText>Simple Text</NavbarText> */}
         </Collapse>

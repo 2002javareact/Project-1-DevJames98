@@ -6,6 +6,7 @@ import { Form, FormGroup, Label, Col, Input, Button } from "reactstrap";
 import { ersUpdateUser } from "../../remote/users-ers-remote";
 import { Reimbursement } from "../../models/Reimbursement";
 import { ersUpdateReimbursement } from "../../remote/reimbursements-ers-remote";
+import { ReimbursementInfoComponent } from "../reimbursement-info-component/ReimbursementInfoComponent";
 
 interface IUpdateReimbursementProps extends RouteComponentProps {
   currentUser: User;
@@ -13,16 +14,17 @@ interface IUpdateReimbursementProps extends RouteComponentProps {
 
 ///remember to put the default states for all form fields
 interface IUpdateReimbursementState {
-  updatedReimbursement: Reimbursement | undefined;
+  updatedReimbursement: Reimbursement;
   reimbursementId: number;
   author: number;
   amount: number;
-  dateSubmitted: number;
-  dateResolved: number;
+  dateSubmitted: any;
+  dateResolved: any;
   description: string;
   resolver: number;
   status: number;
   type: number;
+  didSubmit: boolean;
   errorMessage: string;
 }
 
@@ -33,16 +35,17 @@ export class UpdateReimbursementComponent extends React.Component<
   constructor(props: any) {
     super(props);
     this.state = {
-      updatedReimbursement: undefined,
+      updatedReimbursement: new Reimbursement(0, 0, 0, 0, 0, "", 0, 0, 0),
       reimbursementId: 0,
       author: 0,
       amount: 0,
-      dateSubmitted: 0,
-      dateResolved: 0,
+      dateSubmitted: "",
+      dateResolved: "",
       description: "",
       resolver: 0,
       status: 0,
       type: 0,
+      didSubmit: false,
       errorMessage: ""
     };
   }
@@ -110,7 +113,17 @@ export class UpdateReimbursementComponent extends React.Component<
         this.state.type
       );
       this.setState({
-        updatedReimbursement: updatedReimbursement
+        updatedReimbursement: updatedReimbursement,
+        reimbursementId: 0,
+        author: 0,
+        amount: 0,
+        dateSubmitted: "",
+        dateResolved: "",
+        description: "",
+        resolver: 0,
+        status: 0,
+        type: 0,
+        didSubmit: true
       });
       //I DONT HAVE TO SET STATE?
       //Sets the user in App.tsx
@@ -125,18 +138,20 @@ export class UpdateReimbursementComponent extends React.Component<
       // role: number
       //            });
       console.log(updatedReimbursement);
+      console.log(this.state.updatedReimbursement.reimbursementId);
     } catch (e) {
       if (e.status === 404) {
         this.setState({
           reimbursementId: 0,
           author: 0,
           amount: 0,
-          dateSubmitted: 0,
-          dateResolved: 0,
+          dateSubmitted: "",
+          dateResolved: "",
           description: "",
           resolver: 0,
           status: 0,
           type: 0,
+          didSubmit: false,
           errorMessage: e.message
         });
       } else {
@@ -144,12 +159,13 @@ export class UpdateReimbursementComponent extends React.Component<
           reimbursementId: 0,
           author: 0,
           amount: 0,
-          dateSubmitted: 0,
-          dateResolved: 0,
+          dateSubmitted: "",
+          dateResolved: "",
           description: "",
           resolver: 0,
           status: 0,
           type: 0,
+          didSubmit: false,
           errorMessage: "Something Went Wrong. Oops!"
         });
       }
@@ -160,7 +176,6 @@ export class UpdateReimbursementComponent extends React.Component<
   render() {
     return this.props.currentUser.role.role === "Admin" ? (
       <>
-        <NavBarComponent />
         {/* Form to submit all fields that you want to update */}
         <Form onSubmit={this.submitUpdate}>
           {/* only thing required should be the user id */}
@@ -172,7 +187,7 @@ export class UpdateReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateReimbursementId}
                 value={this.state.reimbursementId}
-                type="text"
+                type="number"
                 name="reimbursementId"
                 id="reimbursementId"
                 placeholder="ReimbursementId"
@@ -188,7 +203,7 @@ export class UpdateReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateAuthor}
                 value={this.state.author}
-                type="text"
+                type="number"
                 name="author"
                 id="author"
                 placeholder="Author"
@@ -203,7 +218,7 @@ export class UpdateReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateAmount}
                 value={this.state.amount}
-                type="text"
+                type="number"
                 name="amount"
                 id="amount"
                 placeholder="Amount"
@@ -218,7 +233,7 @@ export class UpdateReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateDateSubmitted}
                 value={this.state.dateSubmitted}
-                type="text"
+                type="date"
                 name="dateSubmitted"
                 id="dateSubmitted"
                 placeholder="Date Submitted"
@@ -233,7 +248,7 @@ export class UpdateReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateDateResolved}
                 value={this.state.dateResolved}
-                type="text"
+                type="date"
                 name="dateResolved"
                 id="dateResolved"
                 placeholder="Date Resolved"
@@ -264,7 +279,7 @@ export class UpdateReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateResolver}
                 value={this.state.resolver}
-                type="text"
+                type="number"
                 name="resolver"
                 id="resolver"
                 placeholder="Resolver"
@@ -280,7 +295,7 @@ export class UpdateReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateStatus}
                 value={this.state.status}
-                type="text"
+                type="number"
                 name="status"
                 id="status"
                 placeholder="Status"
@@ -296,7 +311,7 @@ export class UpdateReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateType}
                 value={this.state.type}
-                type="text"
+                type="number"
                 name="type"
                 id="type"
                 placeholder="Type"
@@ -305,7 +320,17 @@ export class UpdateReimbursementComponent extends React.Component<
           </FormGroup>
           <Button color="info">Submit</Button>
         </Form>
-        {/* <p>{this.state.updatedUser}</p> */}
+        <p>{this.state.errorMessage}</p>
+        {console.log(this.state.updatedReimbursement)}
+        {console.log(this.state.updatedReimbursement.reimbursementId)}
+        {this.state.didSubmit === true ? (
+          <ReimbursementInfoComponent
+            currentReimbursement={this.state.updatedReimbursement}
+            key={this.state.updatedReimbursement.reimbursementId}
+          />
+        ) : (
+          <p></p>
+        )}
       </>
     ) : (
       <Redirect to="/" />

@@ -20,7 +20,12 @@ function App() {
   return (
     <div className="App">
       <Router>
-        {/* <NavBarComponent /> */}
+        {currentUser.userId !== 0 ? (
+          <NavBarComponent role={currentUser.role.role} />
+        ) : (
+          <p></p>
+        )}
+
         <Switch>
           {/* Login Component */}
           {/* <Route path="/login" component={LoginComponent} /> */}
@@ -34,6 +39,17 @@ function App() {
             path="/profile"
             render={() => <ProfileComponent currentUser={currentUser} />}
           />
+          {/* <Route
+            path="/profile"
+            render={props => (
+              <ProfileComponent
+                history={props.history}
+                match={props.match}
+                location={props.location}
+                currentUser={currentUser}
+              />
+            )}
+          /> */}
           {/* Manage Component */}
           {/* <Route path="/manage" component={ManageComponent} /> */}
           <Route

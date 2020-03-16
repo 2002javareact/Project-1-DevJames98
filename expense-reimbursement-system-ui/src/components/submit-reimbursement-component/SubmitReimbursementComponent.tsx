@@ -6,6 +6,7 @@ import { Form, FormGroup, Label, Col, Input, Button } from "reactstrap";
 import { ersUpdateUser } from "../../remote/users-ers-remote";
 import { Reimbursement } from "../../models/Reimbursement";
 import { ersSubmitReimbursement } from "../../remote/reimbursements-ers-remote";
+import { ReimbursementInfoComponent } from "../reimbursement-info-component/ReimbursementInfoComponent";
 
 interface ISubmitReimbursementProps extends RouteComponentProps {
   currentUser: User;
@@ -13,7 +14,7 @@ interface ISubmitReimbursementProps extends RouteComponentProps {
 
 ///remember to put the default states for all form fields
 interface ISubmitReimbursementState {
-  submittedReimbursement: Reimbursement | undefined;
+  submittedReimbursement: Reimbursement;
   reimbursementId: number;
   author: number;
   amount: number;
@@ -23,6 +24,7 @@ interface ISubmitReimbursementState {
   resolver: number;
   status: number;
   type: number;
+  didSubmit: boolean;
   errorMessage: string;
 }
 
@@ -33,7 +35,7 @@ export class SubmitReimbursementComponent extends React.Component<
   constructor(props: any) {
     super(props);
     this.state = {
-      submittedReimbursement: undefined,
+      submittedReimbursement: new Reimbursement(0, 0, 0, 0, 0, "", 0, 0, 0),
       reimbursementId: 0,
       author: 0,
       amount: 0,
@@ -43,6 +45,7 @@ export class SubmitReimbursementComponent extends React.Component<
       resolver: 0,
       status: 0,
       type: 0,
+      didSubmit: false,
       errorMessage: ""
     };
   }
@@ -105,7 +108,17 @@ export class SubmitReimbursementComponent extends React.Component<
         this.state.type
       );
       this.setState({
-        submittedReimbursement: submittedReimbursement
+        submittedReimbursement: submittedReimbursement,
+        reimbursementId: 0,
+        author: 0,
+        amount: 0,
+        dateSubmitted: 0,
+        dateResolved: 0,
+        description: "",
+        resolver: 0,
+        status: 0,
+        type: 0,
+        didSubmit: true
       });
       //I DONT HAVE TO SET STATE?
       //Sets the user in App.tsx
@@ -132,6 +145,7 @@ export class SubmitReimbursementComponent extends React.Component<
           resolver: 0,
           status: 0,
           type: 0,
+          didSubmit: false,
           errorMessage: e.message
         });
       } else {
@@ -145,6 +159,7 @@ export class SubmitReimbursementComponent extends React.Component<
           resolver: 0,
           status: 0,
           type: 0,
+          didSubmit: false,
           errorMessage: "Something Went Wrong. Oops!"
         });
       }
@@ -155,7 +170,6 @@ export class SubmitReimbursementComponent extends React.Component<
   render() {
     return this.props.currentUser.role.role === "Admin" ? (
       <>
-        <NavBarComponent />
         {/* Form to submit all fields that you want to update */}
         <Form onSubmit={this.submitReimbursement}>
           <FormGroup row>
@@ -166,7 +180,7 @@ export class SubmitReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateAuthor}
                 value={this.state.author}
-                type="text"
+                type="number"
                 name="author"
                 id="author"
                 placeholder="Author"
@@ -182,7 +196,7 @@ export class SubmitReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateAmount}
                 value={this.state.amount}
-                type="text"
+                type="number"
                 name="amount"
                 id="amount"
                 placeholder="Amount"
@@ -198,7 +212,7 @@ export class SubmitReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateDateSubmitted}
                 value={this.state.dateSubmitted}
-                type="text"
+                type="date"
                 name="dateSubmitted"
                 id="dateSubmitted"
                 placeholder="Date Submitted"
@@ -214,7 +228,7 @@ export class SubmitReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateDateResolved}
                 value={this.state.dateResolved}
-                type="text"
+                type="date"
                 name="dateResolved"
                 id="dateResolved"
                 placeholder="Date Resolved"
@@ -247,7 +261,7 @@ export class SubmitReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateResolver}
                 value={this.state.resolver}
-                type="text"
+                type="number"
                 name="resolver"
                 id="resolver"
                 placeholder="Resolver"
@@ -264,7 +278,7 @@ export class SubmitReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateStatus}
                 value={this.state.status}
-                type="text"
+                type="number"
                 name="status"
                 id="status"
                 placeholder="Status"
@@ -281,7 +295,7 @@ export class SubmitReimbursementComponent extends React.Component<
               <Input
                 onChange={this.updateType}
                 value={this.state.type}
-                type="text"
+                type="number"
                 name="type"
                 id="type"
                 placeholder="Type"
@@ -291,7 +305,15 @@ export class SubmitReimbursementComponent extends React.Component<
           </FormGroup>
           <Button color="info">Submit</Button>
         </Form>
-        {/* <p>{this.state.updatedUser}</p> */}
+        <p>{this.state.errorMessage}</p>
+        {this.state.didSubmit === true ? (
+          <ReimbursementInfoComponent
+            currentReimbursement={this.state.submittedReimbursement}
+            key={this.state.submittedReimbursement.reimbursementId}
+          />
+        ) : (
+          <p></p>
+        )}
       </>
     ) : (
       <Redirect to="/" />

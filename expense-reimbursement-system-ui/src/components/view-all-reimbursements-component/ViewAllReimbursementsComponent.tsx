@@ -181,9 +181,6 @@ export class ViewAllReimbursementsComponent extends React.Component<
       this.props.currentUser.role.role === "Admin" ||
         this.props.currentUser.role.role === "Finance-Manager" ? (
         <>
-          <NavBarComponent />
-          <CardDeck elementsPerRow={4}>{userDisplay}</CardDeck>
-
           {/* forms that allow to submit a userId or statusId to search by */}
           <Form onSubmit={this.submitStatusId}>
             <FormGroup row>
@@ -224,6 +221,7 @@ export class ViewAllReimbursementsComponent extends React.Component<
             </FormGroup>
             <Button color="info">Submit</Button>
           </Form>
+          <CardDeck elementsPerRow={4}>{userDisplay}</CardDeck>
         </>
       ) : (
         <Redirect to="/" />

@@ -13,6 +13,9 @@ export class ReimbursementInfoComponent extends React.Component<
   any
 > {
   render() {
+    console.log(this.props.currentReimbursement);
+    console.log(this.props.currentReimbursement.reimbursementId);
+
     return this.props.currentReimbursement.reimbursementId ? (
       <Card>
         <CardTitle>
@@ -28,7 +31,8 @@ export class ReimbursementInfoComponent extends React.Component<
         <CardText>{`Type: ${this.props.currentReimbursement.type}`}</CardText>
       </Card>
     ) : (
-      <Redirect to="/login" />
+      // <Redirect to="/login" />
+      <p>Error</p>
     );
   }
 }

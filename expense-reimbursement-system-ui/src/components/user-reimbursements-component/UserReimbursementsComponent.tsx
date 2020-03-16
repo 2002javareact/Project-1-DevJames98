@@ -5,8 +5,16 @@ import { Redirect, RouteComponentProps } from "react-router";
 import { CardDeck } from "../card-deck-component/CardDeckComponent";
 import { ersGetAllUsers } from "../../remote/users-ers-remote";
 import NavBarComponent from "../navbar-component/NavBarComponent";
+import { Reimbursement } from "../../models/Reimbursement";
+import {
+  ersGetAllReimbursements,
+  ersGetReimbursementsByStatus,
+  ersGetReimbursementsByUserId
+} from "../../remote/reimbursements-ers-remote";
+import { ReimbursementInfoComponent } from "../reimbursement-info-component/ReimbursementInfoComponent";
+import { Form, FormGroup, Label, Col, Input, Button } from "reactstrap";
 
-interface IViewAllUsersProps extends RouteComponentProps {
+interface IUserReimbursementsProps extends RouteComponentProps {
   currentUser: User;
   //allUsers: User[];
   //errorMessage: string;
@@ -14,34 +22,34 @@ interface IViewAllUsersProps extends RouteComponentProps {
 }
 
 ///idk
-interface IViewAllUsersState {
-  allUsers: User[];
+interface IUserReimbursementsState {
+  userReimbursements: Reimbursement[];
   errorMessage: string;
 }
 
-export class ViewAllUsersComponent extends React.Component<
-  IViewAllUsersProps,
-  IViewAllUsersState
+export class UserReimbursementsComponent extends React.Component<
+  IUserReimbursementsProps,
+  IUserReimbursementsState
 > {
   constructor(props: any) {
     super(props);
     this.state = {
-      allUsers: [],
+      userReimbursements: [],
       errorMessage: ""
     };
   }
 
-  getAllUsers = async () => {
-    // e.preventDefault();
+  getUserReimbursements = async () => {
+    //e.preventDefault();
     try {
-      console.log("call from try");
-
-      let users = await ersGetAllUsers();
-      console.log(users);
-
+      let reimbursements = await ersGetReimbursementsByUserId(
+        this.props.currentUser.userId
+      );
       this.setState({
-        allUsers: users
+        userReimbursements: reimbursements
       });
+
+      console.log(reimbursements);
     } catch (e) {
       if (e.status === 404) {
         this.setState({
@@ -58,7 +66,7 @@ export class ViewAllUsersComponent extends React.Component<
   // runs when component starts to exist
   componentDidMount() {
     // check to see if we already have users (redux store)
-    if (this.state.allUsers.length !== 0) {
+    if (this.state.userReimbursements.length !== 0) {
       //return
       //make sure they are admin
     } else if (
@@ -72,7 +80,7 @@ export class ViewAllUsersComponent extends React.Component<
       //have constructor be an empty array
       console.log("got here");
       //try catch
-      this.getAllUsers();
+      this.getUserReimbursements();
       //this.setState({})
 
       //  try {
@@ -86,11 +94,16 @@ export class ViewAllUsersComponent extends React.Component<
   }
 
   render() {
-    console.log(this.state.allUsers);
+    console.log(this.state.userReimbursements);
 
-    //turn array of users into display components
-    let userDisplay = this.state.allUsers.map(ele => {
-      return <UserInfoComponent currentUser={ele} key={ele.userId} />;
+    //turn array of reimbursements into display components
+    let userDisplay = this.state.userReimbursements.map(ele => {
+      return (
+        <ReimbursementInfoComponent
+          currentReimbursement={ele}
+          key={ele.reimbursementId}
+        />
+      );
     });
     // console.log(this.props.currentUser.role);
     //console.log(this.props.currentUser.role.role);
@@ -99,7 +112,8 @@ export class ViewAllUsersComponent extends React.Component<
       // <NavBarComponent/>
       // // check for role or redirect
       this.props.currentUser.role.role === "Admin" ||
-        this.props.currentUser.role.role === "Finance-Manager" ? (
+        this.props.currentUser.role.role === "Finance-Manager" ||
+        this.props.currentUser.role.role === "User" ? (
         <>
           <CardDeck elementsPerRow={4}>{userDisplay}</CardDeck>
         </>

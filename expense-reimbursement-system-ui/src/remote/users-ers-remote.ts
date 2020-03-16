@@ -1,6 +1,7 @@
 import { ersClient } from "./ers-client";
 import { InternalServerError } from "../errors/InternalServerError";
 import { User } from "../models/User";
+import { UserNotFoundError } from "../errors/UserNotFoundError";
 
 //function to get all users
 export const ersGetAllUsers = async () => {
@@ -21,11 +22,13 @@ export const ersGetAllUsers = async () => {
 };
 
 //function to get one user
-export const ersGetUser = async (user: User) => {
+export const ersGetUser = async (id: number) => {
   try {
-    let response = await ersClient.get(`/users/${user.userId}`);
+    let response = await ersClient.get(`/users/${id}`);
     console.log(response);
+    console.log(response.status);
 
+    //check for 404s
     if (response.status === 200) {
       console.log(response.data);
 
@@ -34,7 +37,17 @@ export const ersGetUser = async (user: User) => {
       throw new InternalServerError();
     }
   } catch (e) {
-    throw new InternalServerError();
+    //console.log(e);
+
+    if ((e.message = "Request failed with status code 404")) {
+      //console.log("throw user e");
+
+      throw new UserNotFoundError();
+    } else {
+      //console.log("throwing internal");
+
+      throw new InternalServerError();
+    }
   }
 };
 

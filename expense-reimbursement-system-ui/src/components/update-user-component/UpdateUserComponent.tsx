@@ -4,6 +4,8 @@ import { Redirect, RouteComponentProps } from "react-router";
 import { User } from "../../models/User";
 import { Form, FormGroup, Label, Col, Input, Button } from "reactstrap";
 import { ersUpdateUser } from "../../remote/users-ers-remote";
+import { UserInfoComponent } from "../user-info/UserInfoComponent";
+import { Role } from "../../models/Role";
 
 interface IUpdateUserProps extends RouteComponentProps {
   currentUser: User;
@@ -11,13 +13,14 @@ interface IUpdateUserProps extends RouteComponentProps {
 
 ///remember to put the default states for all form fields
 interface IUpdateUserState {
-  updatedUser: User | undefined;
+  updatedUser: User;
   userId: number;
   username: string;
   firstName: string;
   lastName: string;
   email: string;
   role: number;
+  didSubmit: boolean;
   errorMessage: string;
 }
 
@@ -28,13 +31,14 @@ export class UpdateUserComponent extends React.Component<
   constructor(props: any) {
     super(props);
     this.state = {
-      updatedUser: undefined,
+      updatedUser: new User(0, "", "", "", "", new Role(0, "")),
       userId: 0,
       username: "",
       firstName: "",
       lastName: "",
       email: "",
       role: 0,
+      didSubmit: false,
       errorMessage: ""
     };
   }
@@ -84,7 +88,14 @@ export class UpdateUserComponent extends React.Component<
         this.state.role
       );
       this.setState({
-        updatedUser: updatedUser
+        updatedUser: updatedUser,
+        userId: 0,
+        username: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        role: 0,
+        didSubmit: true
       });
       //I DONT HAVE TO SET STATE?
       //Sets the user in App.tsx
@@ -108,6 +119,7 @@ export class UpdateUserComponent extends React.Component<
           lastName: "",
           email: "",
           role: 0,
+          didSubmit: false,
           errorMessage: e.message
         });
       } else {
@@ -118,6 +130,7 @@ export class UpdateUserComponent extends React.Component<
           lastName: "",
           email: "",
           role: 0,
+          didSubmit: false,
           errorMessage: "Something Went Wrong. Oops!"
         });
       }
@@ -128,7 +141,6 @@ export class UpdateUserComponent extends React.Component<
   render() {
     return this.props.currentUser.role.role === "Admin" ? (
       <>
-        <NavBarComponent />
         {/* Form to submit all fields that you want to update */}
         <Form onSubmit={this.submitUpdate}>
           {/* only thing required should be the user id */}
@@ -140,7 +152,7 @@ export class UpdateUserComponent extends React.Component<
               <Input
                 onChange={this.updateUserId}
                 value={this.state.userId}
-                type="text"
+                type="number"
                 name="userId"
                 id="userId"
                 placeholder="UserId"
@@ -217,7 +229,7 @@ export class UpdateUserComponent extends React.Component<
               <Input
                 onChange={this.updateRole}
                 value={this.state.role}
-                type="text"
+                type="number"
                 name="role"
                 id="role"
                 placeholder="Role"
@@ -226,11 +238,19 @@ export class UpdateUserComponent extends React.Component<
           </FormGroup>
           <Button color="info">Submit</Button>
         </Form>
-        {/* <p>{this.state.updatedUser}</p> */}
+        <p>{this.state.errorMessage}</p>
+        {this.state.didSubmit === true ? (
+          <UserInfoComponent
+            currentUser={this.state.updatedUser}
+            key={this.state.updatedUser.userId}
+          />
+        ) : (
+          <p></p>
+        )}
       </>
     ) : (
-      // <Redirect to="/" />
-      <Redirect to={`${this.props.match.path}/user`} />
+      <Redirect to="/" />
+      // <Redirect to={`${this.props.match.path}/user`} />
     );
   }
 }
