@@ -2,7 +2,17 @@ import React, { SyntheticEvent } from "react";
 import NavBarComponent from "../navbar-component/NavBarComponent";
 import { Redirect, RouteComponentProps } from "react-router";
 import { User } from "../../models/User";
-import { Form, FormGroup, Label, Col, Input, Button } from "reactstrap";
+import {
+  Form,
+  FormGroup,
+  Label,
+  Col,
+  Input,
+  Button,
+  Toast,
+  ToastHeader,
+  ToastBody
+} from "reactstrap";
 import { ersUpdateUser } from "../../remote/users-ers-remote";
 import { Reimbursement } from "../../models/Reimbursement";
 import { ersSubmitReimbursement } from "../../remote/reimbursements-ers-remote";
@@ -18,8 +28,8 @@ interface ISubmitReimbursementState {
   reimbursementId: number;
   author: number;
   amount: number;
-  dateSubmitted: number;
-  dateResolved: number;
+  dateSubmitted: any;
+  dateResolved: any;
   description: string;
   resolver: number;
   status: number;
@@ -37,13 +47,13 @@ export class SubmitReimbursementComponent extends React.Component<
     this.state = {
       submittedReimbursement: new Reimbursement(0, 0, 0, 0, 0, "", 0, 0, 0),
       reimbursementId: 0,
-      author: 0,
+      author: this.props.currentUser.userId,
       amount: 0,
-      dateSubmitted: 0,
-      dateResolved: 0,
+      dateSubmitted: "",
+      dateResolved: "",
       description: "",
       resolver: 0,
-      status: 0,
+      status: 1,
       type: 0,
       didSubmit: false,
       errorMessage: ""
@@ -94,6 +104,8 @@ export class SubmitReimbursementComponent extends React.Component<
 
   // Function to submit update to db
   submitReimbursement = async (e: SyntheticEvent) => {
+    console.log(this.state.dateSubmitted);
+
     e.preventDefault();
     try {
       let submittedReimbursement = await ersSubmitReimbursement(
@@ -107,16 +119,18 @@ export class SubmitReimbursementComponent extends React.Component<
         this.state.status,
         this.state.type
       );
+      console.log(submittedReimbursement);
+
       this.setState({
         submittedReimbursement: submittedReimbursement,
         reimbursementId: 0,
-        author: 0,
+        author: this.props.currentUser.userId,
         amount: 0,
-        dateSubmitted: 0,
-        dateResolved: 0,
+        dateSubmitted: "",
+        dateResolved: "",
         description: "",
         resolver: 0,
-        status: 0,
+        status: 1,
         type: 0,
         didSubmit: true
       });
@@ -137,13 +151,13 @@ export class SubmitReimbursementComponent extends React.Component<
       if (e.status === 404) {
         this.setState({
           reimbursementId: 0,
-          author: 0,
+          author: this.props.currentUser.userId,
           amount: 0,
-          dateSubmitted: 0,
-          dateResolved: 0,
+          dateSubmitted: "",
+          dateResolved: "",
           description: "",
           resolver: 0,
-          status: 0,
+          status: 1,
           type: 0,
           didSubmit: false,
           errorMessage: e.message
@@ -151,13 +165,13 @@ export class SubmitReimbursementComponent extends React.Component<
       } else {
         this.setState({
           reimbursementId: 0,
-          author: 0,
+          author: this.props.currentUser.userId,
           amount: 0,
-          dateSubmitted: 0,
-          dateResolved: 0,
+          dateSubmitted: "",
+          dateResolved: "",
           description: "",
           resolver: 0,
-          status: 0,
+          status: 1,
           type: 0,
           didSubmit: false,
           errorMessage: "Something Went Wrong. Oops!"
@@ -179,7 +193,7 @@ export class SubmitReimbursementComponent extends React.Component<
             <Col sm={6}>
               <Input
                 onChange={this.updateAuthor}
-                value={this.state.author}
+                value={this.props.currentUser.userId}
                 type="number"
                 name="author"
                 id="author"
@@ -303,9 +317,16 @@ export class SubmitReimbursementComponent extends React.Component<
               />
             </Col>
           </FormGroup>
-          <Button color="info">Submit</Button>
+          <Button color="success">Submit</Button>
         </Form>
-        <p>{this.state.errorMessage}</p>
+        {this.state.errorMessage === "" ? (
+          <p>{this.state.errorMessage}</p>
+        ) : (
+          <Toast>
+            <ToastHeader icon="danger">Error!</ToastHeader>
+            <ToastBody>{this.state.errorMessage}</ToastBody>
+          </Toast>
+        )}
         {this.state.didSubmit === true ? (
           <ReimbursementInfoComponent
             currentReimbursement={this.state.submittedReimbursement}

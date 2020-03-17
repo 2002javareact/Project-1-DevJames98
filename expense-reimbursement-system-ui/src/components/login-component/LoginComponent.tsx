@@ -121,9 +121,16 @@ export class LoginComponent extends React.Component<
                 />
               </Col>
             </FormGroup>
-            <Button color="info">Submit</Button>
+            <Button color="success">Submit</Button>
           </Form>
-          <p>{this.state.errorMessage}</p>
+          {this.state.errorMessage === "" ? (
+            <p>{this.state.errorMessage}</p>
+          ) : (
+            <Toast>
+              <ToastHeader icon="danger">Error!</ToastHeader>
+              <ToastBody>{this.state.errorMessage}</ToastBody>
+            </Toast>
+          )}
         </>
       )
     );

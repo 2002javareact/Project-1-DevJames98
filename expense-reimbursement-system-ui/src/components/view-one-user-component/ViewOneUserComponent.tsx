@@ -5,7 +5,18 @@ import { Redirect, RouteComponentProps } from "react-router";
 import { CardDeck } from "../card-deck-component/CardDeckComponent";
 import { ersGetAllUsers, ersGetUser } from "../../remote/users-ers-remote";
 import NavBarComponent from "../navbar-component/NavBarComponent";
-import { Card, Form, FormGroup, Label, Col, Input, Button } from "reactstrap";
+import {
+  Card,
+  Form,
+  FormGroup,
+  Label,
+  Col,
+  Input,
+  Button,
+  Toast,
+  ToastHeader,
+  ToastBody
+} from "reactstrap";
 import { Role } from "../../models/Role";
 
 interface IViewOneUserProps extends RouteComponentProps {
@@ -108,9 +119,16 @@ export class ViewOneUserComponent extends React.Component<
                 />
               </Col>
             </FormGroup>
-            <Button color="info">Submit</Button>
+            <Button color="success">Submit</Button>
           </Form>
-          <p>{this.state.errorMessage}</p>
+          {this.state.errorMessage === "" ? (
+            <p>{this.state.errorMessage}</p>
+          ) : (
+            <Toast>
+              <ToastHeader icon="danger">Error!</ToastHeader>
+              <ToastBody>{this.state.errorMessage}</ToastBody>
+            </Toast>
+          )}
           {this.state.didSubmit === true ? (
             <UserInfoComponent
               currentUser={this.state.viewUser}

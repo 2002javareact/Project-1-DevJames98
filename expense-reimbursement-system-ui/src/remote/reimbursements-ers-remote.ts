@@ -124,7 +124,7 @@ export async function ersSubmitReimbursement(
     type
   };
   try {
-    let response = await ersClient.post("/reimbursements", newReimbursement);
+    let response = await ersClient.post("/reimbursements/", newReimbursement);
     console.log(response);
     //change to !== 200?
     // if (response.status === 400) {

@@ -36,12 +36,16 @@ const NavBarComponent = (props: any) => {
           <Nav className="mr-auto" navbar>
             <NavItem>
               {/* <NavLink to="/profile">Profile</NavLink> */}
-              <Link to="/">Home</Link>
+              <Link className="link" to="/">
+                Home
+              </Link>
             </NavItem>
             <DropdownItem divider />
             <NavItem>
               {/* <NavLink to="/profile">Profile</NavLink> */}
-              <Link to="/profile">Profile</Link>
+              <Link className="link" to="/profile">
+                Profile
+              </Link>
             </NavItem>
             <DropdownItem divider />
             {props.role === "User" ? (
@@ -105,7 +109,9 @@ const NavBarComponent = (props: any) => {
             </UncontrolledDropdown>
             {/* <NavbarText>Simple Text</NavbarText> */}
             <DropdownItem divider />
-            <Button href="/">Log Out</Button>
+            <Button className="logout-button" href="/">
+              Log Out
+            </Button>
           </Nav>
           {/* <NavbarText>Simple Text</NavbarText> */}
         </Collapse>

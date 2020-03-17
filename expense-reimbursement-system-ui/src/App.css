@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: #f26925;
 }
 
 .App-logo {
@@ -36,3 +37,70 @@
     transform: rotate(360deg);
   }
 }
+
+/* Revature Orange - #f26925 */
+.login-button {
+  background-color: white;
+  color: black;
+}
+.login-button:hover {
+  background-color: black;
+  border: 1px solid black;
+}
+.logout-button {
+  background-color: black;
+  color: white;
+  /* justify-content: right; */
+}
+.logout-button:hover {
+  background-color: white;
+  color: black;
+  border: 1px solid white;
+}
+.profile-buttons {
+  background-color: white;
+  color: black;
+  border: 1px solid white;
+  padding: 5px;
+}
+.profile-buttons:hover {
+  background-color: black;
+  color: white;
+  border: 1px solid black;
+}
+
+.jumbo {
+  background-color: black;
+  color: white;
+}
+
+/* .empty {
+  background-color: #f26925;
+} */
+.footer {
+  background-color: black;
+  color: white;
+}
+html {
+  background-color: #f26925;
+}
+
+/* .nav {
+  background-color: black;
+} */
+.link {
+  color: rgba(0, 0, 0, 0.5);
+  display: block;
+  padding: 0.5rem 1rem;
+}
+.link:hover {
+  color: rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+}
+/* .card {
+  padding: 5px;
+  color: black;
+} */
+/* aside {
+  float: right;
+} */

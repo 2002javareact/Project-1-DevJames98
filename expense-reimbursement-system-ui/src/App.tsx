@@ -11,6 +11,7 @@ import { ManageComponent } from "./components/manage-component/ManageComponent";
 import { ReimbursementsComponent } from "./components/reimbursements-component/ReimbursementsComponent";
 import { User } from "./models/User";
 import { Role } from "./models/Role";
+import { FooterComponent } from "./components/footer-component/FooterComponent";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(
@@ -37,7 +38,14 @@ function App() {
           {/* <Route path="/profile" component={ProfileComponent} /> */}
           <Route
             path="/profile"
-            render={() => <ProfileComponent currentUser={currentUser} />}
+            render={props => (
+              <ProfileComponent
+                history={props.history}
+                match={props.match}
+                location={props.location}
+                currentUser={currentUser}
+              />
+            )}
           />
           {/* <Route
             path="/profile"
@@ -77,8 +85,19 @@ function App() {
             )}
           />
           {/* Home Page Component */}
-          <Route path="/" component={HomeComponent} />
+          <Route
+            path="/"
+            render={props => (
+              <HomeComponent
+                history={props.history}
+                match={props.match}
+                location={props.location}
+                currentUser={currentUser}
+              />
+            )}
+          />
         </Switch>
+        <FooterComponent />
       </Router>
     </div>
   );

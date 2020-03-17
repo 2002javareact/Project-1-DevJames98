@@ -1,9 +1,13 @@
 import React from "react";
 import NavBarComponent from "../navbar-component/NavBarComponent";
 import { User } from "../../models/User";
-import { Redirect } from "react-router";
+import { Redirect, RouteComponentProps } from "react-router";
+import ViewReimbursementsButtonComponent from "../view-reimbursements-button-component/ViewReimbursementsButtonComponent";
+import SubmitReimbursementButtonComponent from "../submit-reimbursement-button-component/SubmitReimbursementButtonComponent";
+import ManageUsersButtonComponent from "../manage-users-button-component/ManageUsersButtonComponent";
+import ManageReimbursementsButtonComponent from "../manage-reimbursements-button-component/ManageReimbursementsButtonComponent";
 
-interface IProfileProps {
+interface IProfileProps extends RouteComponentProps {
   currentUser: User;
 }
 
@@ -17,6 +21,16 @@ export class ProfileComponent extends React.Component<IProfileProps, any> {
         <h4>{`Role: ${this.props.currentUser.role.role}`}</h4>
         {console.log(this.props.currentUser)}
         {/* put buttons to view and submit reimbursements */}
+        <ViewReimbursementsButtonComponent history={this.props.history} />
+        <SubmitReimbursementButtonComponent history={this.props.history} />
+        {this.props.currentUser.role.role !== "User" ? (
+          <>
+            <ManageUsersButtonComponent history={this.props.history} />
+            <ManageReimbursementsButtonComponent history={this.props.history} />
+          </>
+        ) : (
+          <div></div>
+        )}
         {/* put buttons to view users or reimbursements */}
       </>
     ) : (

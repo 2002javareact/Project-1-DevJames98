@@ -2,7 +2,17 @@ import React, { SyntheticEvent } from "react";
 import NavBarComponent from "../navbar-component/NavBarComponent";
 import { Redirect, RouteComponentProps } from "react-router";
 import { User } from "../../models/User";
-import { Form, FormGroup, Label, Col, Input, Button } from "reactstrap";
+import {
+  Form,
+  FormGroup,
+  Label,
+  Col,
+  Input,
+  Button,
+  Toast,
+  ToastHeader,
+  ToastBody
+} from "reactstrap";
 import { ersUpdateUser } from "../../remote/users-ers-remote";
 import { Reimbursement } from "../../models/Reimbursement";
 import { ersUpdateReimbursement } from "../../remote/reimbursements-ers-remote";
@@ -318,9 +328,17 @@ export class UpdateReimbursementComponent extends React.Component<
               />
             </Col>
           </FormGroup>
-          <Button color="info">Submit</Button>
+          <Button color="success">Submit</Button>
         </Form>
-        <p>{this.state.errorMessage}</p>
+        {/* Have to fix error handling in the back end */}
+        {this.state.errorMessage === "" ? (
+          <p>{this.state.errorMessage}</p>
+        ) : (
+          <Toast>
+            <ToastHeader icon="danger">Error!</ToastHeader>
+            <ToastBody>{this.state.errorMessage}</ToastBody>
+          </Toast>
+        )}
         {console.log(this.state.updatedReimbursement)}
         {console.log(this.state.updatedReimbursement.reimbursementId)}
         {this.state.didSubmit === true ? (

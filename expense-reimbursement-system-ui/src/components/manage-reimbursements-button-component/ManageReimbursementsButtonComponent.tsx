@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, useHistory } from "react-router-dom";
 import { LoginComponent } from "../login-component/LoginComponent";
 import { Button } from "reactstrap";
 
-export const LoginButtonComponent = (props: any) => {
+export const ManageReimbursementsButtonComponent = (props: any) => {
   // const gotoLogin = () => {
   // let path = "/login";
   // let history = useHistory();
@@ -12,15 +12,15 @@ export const LoginButtonComponent = (props: any) => {
 
   return (
     <Button
-      className="login-button"
-      path={"/login"}
+      className="profile-buttons"
+      path={"/manage/reimbursements"}
       onClick={() => {
-        props.history.push("/login");
+        props.history.push("/manage/reimbursements");
       }}
     >
-      Log In
+      Manage Reimbursements
     </Button>
   );
 };
 
-export default LoginButtonComponent;
+export default ManageReimbursementsButtonComponent;

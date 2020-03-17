@@ -2,7 +2,17 @@ import React, { SyntheticEvent } from "react";
 import NavBarComponent from "../navbar-component/NavBarComponent";
 import { Redirect, RouteComponentProps } from "react-router";
 import { User } from "../../models/User";
-import { Form, FormGroup, Label, Col, Input, Button } from "reactstrap";
+import {
+  Form,
+  FormGroup,
+  Label,
+  Col,
+  Input,
+  Button,
+  Toast,
+  ToastHeader,
+  ToastBody
+} from "reactstrap";
 import { ersUpdateUser } from "../../remote/users-ers-remote";
 import { UserInfoComponent } from "../user-info/UserInfoComponent";
 import { Role } from "../../models/Role";
@@ -236,9 +246,16 @@ export class UpdateUserComponent extends React.Component<
               />
             </Col>
           </FormGroup>
-          <Button color="info">Submit</Button>
+          <Button color="success">Submit</Button>
         </Form>
-        <p>{this.state.errorMessage}</p>
+        {this.state.errorMessage === "" ? (
+          <p>{this.state.errorMessage}</p>
+        ) : (
+          <Toast>
+            <ToastHeader icon="danger">Error!</ToastHeader>
+            <ToastBody>{this.state.errorMessage}</ToastBody>
+          </Toast>
+        )}
         {this.state.didSubmit === true ? (
           <UserInfoComponent
             currentUser={this.state.updatedUser}

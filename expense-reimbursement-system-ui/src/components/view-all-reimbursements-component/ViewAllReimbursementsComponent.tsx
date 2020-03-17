@@ -12,7 +12,17 @@ import {
   ersGetReimbursementsByUserId
 } from "../../remote/reimbursements-ers-remote";
 import { ReimbursementInfoComponent } from "../reimbursement-info-component/ReimbursementInfoComponent";
-import { Form, FormGroup, Label, Col, Input, Button } from "reactstrap";
+import {
+  Form,
+  FormGroup,
+  Label,
+  Col,
+  Input,
+  Button,
+  Toast,
+  ToastHeader,
+  ToastBody
+} from "reactstrap";
 
 interface IViewAllReimbursementsProps extends RouteComponentProps {
   currentUser: User;
@@ -75,7 +85,8 @@ export class ViewAllReimbursementsComponent extends React.Component<
       );
       this.setState({
         allReimbursements: status,
-        statusIdToSearch: 0
+        statusIdToSearch: 0,
+        errorMessage: ""
       });
 
       console.log(status);
@@ -100,7 +111,8 @@ export class ViewAllReimbursementsComponent extends React.Component<
       let user = await ersGetReimbursementsByUserId(this.state.userIdToSearch);
       this.setState({
         allReimbursements: user,
-        userIdToSearch: 0
+        userIdToSearch: 0,
+        errorMessage: ""
       });
 
       console.log(user);
@@ -199,7 +211,7 @@ export class ViewAllReimbursementsComponent extends React.Component<
                 />
               </Col>
             </FormGroup>
-            <Button color="info">Submit</Button>
+            <Button color="success">Submit</Button>
           </Form>
 
           <Form onSubmit={this.submitUserId}>
@@ -219,8 +231,16 @@ export class ViewAllReimbursementsComponent extends React.Component<
                 />
               </Col>
             </FormGroup>
-            <Button color="info">Submit</Button>
+            <Button color="success">Submit</Button>
           </Form>
+          {this.state.errorMessage === "" ? (
+            <p>{this.state.errorMessage}</p>
+          ) : (
+            <Toast>
+              <ToastHeader icon="danger">Error!</ToastHeader>
+              <ToastBody>{this.state.errorMessage}</ToastBody>
+            </Toast>
+          )}
           <CardDeck elementsPerRow={4}>{userDisplay}</CardDeck>
         </>
       ) : (
